@@ -27,11 +27,11 @@ export class GridComponent {
     buttonsContainer.style.gap = '10px';
 
     const addButton = document.createElement('button');
-    addButton.textContent = '➕ إضافة كرت';
+    addButton.textContent = '➕ Add Card';
     addButton.onclick = () => this.addCard();
 
     const deleteButton = document.createElement('button');
-    deleteButton.textContent = '🗑️ حذف المحدد';
+    deleteButton.textContent = '🗑️ Delete Selected';
     deleteButton.onclick = () => this.deleteSelectedCards();
 
     buttonsContainer.appendChild(addButton);
@@ -49,7 +49,7 @@ export class GridComponent {
     this.gridOptions = {
       columnDefs: this.columnDefs,
       defaultColDef: this.defaultColDef,
-      rowSelection: 'multiple', // تمكين اختيار الصفوف
+      rowSelection: 'multiple',
       rowData: savedData,
       onCellValueChanged: () => this.saveDataToStorage(),
     };
@@ -63,12 +63,11 @@ export class GridComponent {
     localStorage.setItem('gridData', JSON.stringify(allData));
   }
 
-  // ✅ أضف هاتين الدالتين هنا
   addCard() {
     const newItem = {
-      name: 'اسم جديد',
-      type: 'نوع',
-      rarity: 'ندرة',
+      name: 'New Name',
+      type: 'Type',
+      rarity: 'Rarity',
       manaCost: '0',
     };
     this.gridOptions.api.applyTransaction({ add: [newItem] });
