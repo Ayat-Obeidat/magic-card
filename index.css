@@ -1,14 +1,11 @@
 :root {
   --background-light: #f9fcff;
   --background-dark: #141617;
-
   --color-primary: #e1e1e1;
-
+  --primary: #4caf50;
   --color-secondary: #f44336;
-
   --color-white: #fff;
   --color-gray-80: #6c757d;
-
   --color-white-green: #d1ffd1;
 
   --box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.15);
