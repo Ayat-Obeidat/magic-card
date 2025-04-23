@@ -1,21 +1,12 @@
+import { agGridOptions } from './agGridOptions.js';
+
 export class GridComponent {
   constructor() {
     this.gridDiv = document.createElement('div');
     this.gridDiv.style.height = '400px';
     this.gridDiv.style.width = '100%';
 
-    this.columnDefs = [
-      { field: 'name', editable: true },
-      { field: 'type', editable: true },
-      { field: 'rarity', editable: true },
-      { field: 'manaCost', editable: true },
-    ];
-
-    this.defaultColDef = {
-      flex: 1,
-      minWidth: 100,
-      resizable: true,
-    };
+    this.rowData = [];
   }
 
   render() {
@@ -43,16 +34,12 @@ export class GridComponent {
     return wrapper;
   }
 
-  initializeGrid(rowData) {
-    const savedData = JSON.parse(localStorage.getItem('gridData')) || rowData;
+  initializeGrid(initialRowData) {
+    this.rowData =
+      JSON.parse(localStorage.getItem('gridData')) || initialRowData;
 
-    this.gridOptions = {
-      columnDefs: this.columnDefs,
-      defaultColDef: this.defaultColDef,
-      rowSelection: 'multiple',
-      rowData: savedData,
-      onCellValueChanged: () => this.saveDataToStorage(),
-    };
+    this.gridOptions = agGridOptions(this.rowData);
+    this.gridOptions.onCellValueChanged = () => this.saveDataToStorage();
 
     new agGrid.Grid(this.gridDiv, this.gridOptions);
   }
@@ -65,7 +52,7 @@ export class GridComponent {
 
   addCard() {
     const newItem = {
-      name: 'New Name',
+      name: 'New Card',
       type: 'Type',
       rarity: 'Rarity',
       manaCost: '0',
