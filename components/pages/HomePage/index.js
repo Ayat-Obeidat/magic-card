@@ -3,12 +3,14 @@ import { Button } from '../../atoms/Button/index.js';
 import { INITIAL_COUNTER, CARD_TEXT } from '../../../constants/index.js';
 import { Counter, cardStorage, createElement } from '../../../utils/index.js';
 import { GridComponent } from '../../organisms/GridComponent/GridComponent.js';
+import { KanbanView } from '../../organisms/KanbanView/KanbanView.js';
 
 export class HomePage {
   constructor() {
-    this.counter = new Counter(INITIAL_COUNTER);
-    this.cardList = new CardList(this.counter);
+    this.isKanbanView = false;
+    this.kanbanView = new KanbanView();
     this.gridComponent = new GridComponent();
+
     this.rowData = [
       {
         name: 'Black Lotus',
@@ -30,60 +32,38 @@ export class HomePage {
       },
     ];
   }
+
   render() {
     const container = document.createElement('div');
     container.classList.add('home-page');
 
-    // إضافة المكون GridComponent إلى الصفحة
-    container.appendChild(this.gridComponent.render());
-    this.gridComponent.initializeGrid(this.rowData); // تهيئة الشبكة بالبيانات
+    const toggleButton = document.createElement('button');
+    toggleButton.textContent = this.isKanbanView
+      ? '🔁 Switch to Grid View'
+      : '📋 Switch to Kanban View';
+    toggleButton.onclick = () => {
+      this.isKanbanView = !this.isKanbanView;
+      this.draw(container);
+    };
+
+    container.appendChild(toggleButton);
+
+    if (this.isKanbanView) {
+      container.appendChild(this.kanbanView.render(this.rowData));
+    } else {
+      container.appendChild(this.gridComponent.render());
+      this.gridComponent.initializeGrid(this.rowData);
+    }
 
     return container;
   }
 
   async init(pageContent) {
-    await this.cardList.loadCards();
     this.draw(pageContent);
   }
 
   draw(existingPageContent) {
-    const titleContent = createElement(
-      'h1',
-      { style: 'margin-bottom: 10px;' },
-      'Magic The Gathering Cards'
-    );
-    const counterWrapper = createElement('div', {
-      className: 'counter-wrapper',
-    });
-    const counterBtnContainer = createElement('div', {
-      className: 'counter-btn-container',
-    });
-
-    const selectAllButton = new Button(CARD_TEXT.SELECT_ALL, () =>
-      this.cardList.selectAll()
-    );
-    const deselectAllButton = new Button(
-      CARD_TEXT.DESELECT_ALL,
-      () => this.handleDeselectAll(),
-      'secondary'
-    );
-    counterBtnContainer.append(
-      selectAllButton.element,
-      deselectAllButton.element
-    );
-    counterWrapper.appendChild(titleContent);
-    counterWrapper.appendChild(this.counter.element);
-    counterWrapper.appendChild(counterBtnContainer);
-
-    existingPageContent.append(counterWrapper);
-    existingPageContent.append(this.cardList.cardsWrapper);
-
-    return existingPageContent;
-  }
-
-  handleDeselectAll() {
-    this.cardList.deselectAll();
-    this.counter.reset();
-    cardStorage.save([]);
+    existingPageContent.innerHTML = '';
+    existingPageContent.appendChild(this.render());
   }
 }

@@ -1,12 +1,11 @@
-import { agGridOptions } from './agGridOptions.js';
+import { agGridOptions } from '../../../constants/agGridOptions.js';
+import { CardList } from '../../../organisms/CardList/index.js';
 
 export class GridComponent {
   constructor() {
     this.gridDiv = document.createElement('div');
     this.gridDiv.style.height = '400px';
     this.gridDiv.style.width = '100%';
-
-    this.rowData = [];
   }
 
   render() {
@@ -34,11 +33,11 @@ export class GridComponent {
     return wrapper;
   }
 
-  initializeGrid(initialRowData) {
-    this.rowData =
-      JSON.parse(localStorage.getItem('gridData')) || initialRowData;
+  initializeGrid(initialData) {
+    const savedData =
+      JSON.parse(localStorage.getItem('gridData')) || initialData;
 
-    this.gridOptions = agGridOptions(this.rowData);
+    this.gridOptions = agGridOptions(savedData);
     this.gridOptions.onCellValueChanged = () => this.saveDataToStorage();
 
     new agGrid.Grid(this.gridDiv, this.gridOptions);
@@ -52,7 +51,7 @@ export class GridComponent {
 
   addCard() {
     const newItem = {
-      name: 'New Card',
+      name: 'New Name',
       type: 'Type',
       rarity: 'Rarity',
       manaCost: '0',
