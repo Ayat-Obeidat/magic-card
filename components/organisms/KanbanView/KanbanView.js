@@ -1,3 +1,5 @@
+import './KanbanView.css';
+
 class KanbanView {
   constructor() {
     this.columns = {

@@ -1,16 +1,17 @@
-import { Card } from "../../molecules/Card/index.js";
-import { cardStorage, createElement } from "../../../utils/index.js";
-import { API_URL, DEFAULT_CARD_FETCH_SIZE } from "../../../constants/index.js";
-import { LoadingSpinner } from "../../atoms/LoadingSpinner/index.js";
+import { Card } from '../../molecules/Card/index.js';
+import { cardStorage, createElement } from '../../../utils/index.js';
+import { API_URL, DEFAULT_CARD_FETCH_SIZE } from '../../../constants/index.js';
+import { LoadingSpinner } from '../../atoms/LoadingSpinner/index.js';
+import './cardList.css';
 
 export class CardList {
   constructor(counter) {
     this.cards = [];
     this.counter = counter;
     this.spinner = new LoadingSpinner();
-    this._cardsWrapper = createElement("div", {
-      id: "card-container",
-      className: "grid-container",
+    this._cardsWrapper = createElement('div', {
+      id: 'card-container',
+      className: 'grid-container',
     });
   }
 
@@ -29,7 +30,7 @@ export class CardList {
   }
 
   renderCards() {
-    this._cardsWrapper.innerHTML = "";
+    this._cardsWrapper.innerHTML = '';
 
     this.cards.forEach((card) => {
       this._cardsWrapper.appendChild(card.element);
